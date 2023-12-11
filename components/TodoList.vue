@@ -29,7 +29,7 @@
     <h1 class="text-2xl font-semibold mb-4">
       Daftar catatan yang telah dibuat:
     </h1>
-    <ul>
+    <ul ref="parent" v-auto-animate>
       <li
         v-for="(task, index) in tasks"
         :key="index"
@@ -62,6 +62,15 @@
       </p>
     </ul>
 
+    <div class="flex items-center justify-center gap-6">
+      <button class="py-2 px-4 rounded bg-blue-500 text-white" @click="up">
+        A - Z ↑
+      </button>
+      <button class="py-2 px-4 rounded bg-orange-500 text-white" @click="down">
+        Z - A ↓
+      </button>
+    </div>
+
     <!-- ini bagian terakhir -->
     <div class="flex items-center justify-center gap-6">
       <!-- ini tombol selesai -->
@@ -84,8 +93,18 @@
 </template>
 
 <script setup>
+import { useAutoAnimate } from "@formkit/auto-animate/vue";
+
+const [parent] = useAutoAnimate();
 const tasks = ref([]);
 const tugasBaru = ref("");
+
+function up() {
+  tasks.value.sort((a, b) => a.isi.localeCompare(b.isi));
+}
+function down() {
+  tasks.value.sort((a, b) => b.isi.localeCompare(a.isi));
+}
 
 // Menggunakan local storage key yang unik untuk tugas.
 const localStorageTugas = "toDoTugas";
